@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % at this moment, data set 7 is used
-% addpath('dataset');
+addpath('dataset');
 % loadMRCLAMdataSet;
 % sampleMRCLAMdataSet;
 
