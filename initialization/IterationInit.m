@@ -20,6 +20,7 @@ delta = 0.1; % stepsize
 %%% for pure simulation %%%
 t_s = 10; % start time
 t_f = 100;% end time
+% t_f = 20;% end time, debug
 
 k_f = floor(t_f/delta); % total number of steps
 

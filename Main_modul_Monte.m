@@ -14,7 +14,7 @@ close all;
 addpath('initialization');
 addpath('iteration');
 addpath('visualization');
-rng(1,'twister');
+rng(0,'twister');
 Monte_Carlo_Profile_Gen();  % generate noise once before running simulation
 %%%%%%%%%%%%%%%%%%%%%%k%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Initialization
@@ -56,8 +56,7 @@ end
 % N      : number of robots
 
 n_x = 2*N; %total number of states
-phi_true_init = rand(1,9)*90/57.3;
-% phi_true_init = zeros(1,N);
+
 load MC_AnalysisData.mat;
 load MC_noise_profile_mont.mat;
 load MC_velocity_profile_mont.mat;
@@ -83,10 +82,9 @@ for Monte_index = 1:M
     X_hat_CEKF_subOPT_multi = cell(k_f,N);    % states by standard EKF with sub-optimal scheduling (q^i > 1)
     
     phi_true = zeros(k_f,N);            % true orientations
-    phi_true(1,:) = rand(1,N)*90/57.3;
-    phi_true(1,:) = zeros(1,N);
-    % phi_est = zeros(k_f,N);             % estimated orientations
-    phi_est = phi_true;
+    phi_true(1,:) = rand(1,N)*360/57.3;
+    phi_est = phi_true;                 % estimated orientations
+    phi_est(1,:) = phi_true(1,:) + randn(1,N)*2/57.3; 
     
     P_DR = cell(k_f,1);               % collective covariance for dead reckoning
     P_CEKF_subMOD = cell(k_f,1);      % collective covariance matrix for standard EKF with submodular method

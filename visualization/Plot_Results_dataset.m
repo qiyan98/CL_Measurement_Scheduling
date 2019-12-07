@@ -100,13 +100,13 @@ ind_marker_dense = 1:10:length(Tk);
 ind_marker_sparse = 1:10:length(Tk);
 
 
-plot(Tk,sum(RMSE_CEKF_subMOD(:,i),2),'--','linewidth',2,'Color', 'b','markerindices',ind_marker_dense);
-plot(Tk,sum(RMSE_CEKF_subMOD_multi(:,i),2),'--','linewidth',4,'Color', '#0072BD','markerindices',ind_marker_dense);
-plot(Tk,sum(RMSE_CEKF_subOPT(:,i),2),'-','linewidth',2,'Color', 'y','markerindices',ind_marker_sparse,'markersize',10);
-plot(Tk,sum(RMSE_CEKF_subOPT_multi(:,i),2),'-','linewidth',4,'Color','#EDB120','markerindices',ind_marker_sparse,'markersize',10);
+plot(Tk,sum(RMSE_CEKF_subMOD,2),'--','linewidth',2,'Color', 'b','markerindices',ind_marker_dense);
+plot(Tk,sum(RMSE_CEKF_subMOD_multi,2),'--','linewidth',4,'Color', '#0072BD','markerindices',ind_marker_dense);
+plot(Tk,sum(RMSE_CEKF_subOPT,2),'-','linewidth',2,'Color', 'y','markerindices',ind_marker_sparse,'markersize',10);
+plot(Tk,sum(RMSE_CEKF_subOPT_multi,2),'-','linewidth',4,'Color','#EDB120','markerindices',ind_marker_sparse,'markersize',10);
 
-plot(Tk,sum(RMSE_CEKF_Dense(:,i),2),'k--','linewidth',2,'markerindices',ind_marker_sparse,'markersize',10);
-plot(Tk,sum(RMSE_DR(:,i),2),'k-','linewidth',4);
+plot(Tk,sum(RMSE_CEKF_Dense,2),'k--','linewidth',2,'markerindices',ind_marker_sparse,'markersize',10);
+plot(Tk,sum(RMSE_DR,2),'k-','linewidth',4);
 
 legend('[19],q^i = 1','[19], q^i = 3','our, q^i = 1','our, q^i = 3','dense mea.','DR',...
     'position',[0.2 0.8 0.1 0.01],'units','normalized');

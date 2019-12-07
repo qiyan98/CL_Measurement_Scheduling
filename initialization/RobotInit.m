@@ -28,17 +28,16 @@ X0{8} = [6,6]';
 X0{9} = [9,6]';
 X0{10}= [20,-20]';
 
-%%% Estimated pose Xhat{ID}
-X_hat0=cell(1,N);
-for i = 1:N
-    X_hat0{i}=X0{i}*(0e-3*randn+1);
-end
-
 %% Robot Covariance P{ID}
 P_coll = cell(1,N);
+sigma_init = 0.1;
 for i = 1:N
-    P_coll{i} = diag([0.1^2,0.1^2]);
+    P_coll{i} = diag([sigma_init^2,sigma_init^2]);
 end
 P0 = blkdiag(P_coll{:});
-
+%% Estimated pose Xhat{ID}
+X_hat0=cell(1,N);
+for i = 1:N
+    X_hat0{i}=X0{i} + [sigma_init*randn;sigma_init*randn];
+end
 end

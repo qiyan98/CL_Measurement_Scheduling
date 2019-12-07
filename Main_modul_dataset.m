@@ -59,23 +59,26 @@ delta = sample_time;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%Robot Prameters%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[X0,X_hat0,P0,N] = RobotInit_dataset();
+[~,~,P0,N] = RobotInit_dataset();
 % X0     : initial true poses
 % X_hat0 : initial estimated poses and covariances
 % P0     : initial collective covariances
 % N      : number of robots
 
 N = n_robots;
-for i=1:N
-    X0{i} = eval(['Robot',num2str(i),'_Groundtruth(1,2:3);']);
-    X0{i} = X0{i}';
-    X_hat0{i}=X0{i}*(1e-3*randn+1);
-end
+
 P_coll = cell(1,N);
 for i = 1:N
     P_coll{i} = diag([0.1^2,0.1^2]);
 end
 P0 = blkdiag(P_coll{:});
+
+for i=1:N
+    X0{i} = eval(['Robot',num2str(i),'_Groundtruth(1,2:3);']);
+    X0{i} = X0{i}';
+    X_hat0{i} = X0{i} + [0.1*randn;0.1*randn];
+end
+
 
 n_x = 2*N; %total number of states
 %%
@@ -91,12 +94,12 @@ X_hat_CEKF_subMOD_multi = cell(k_f,N);       % states by standard EKF with OPT (
 X_hat_CEKF_subOPT_multi = cell(k_f,N);    % states by standard EKF with sub-optimal scheduling (q^i > 1)
 
 phi_true = zeros(k_f,N);            % true orientations
-phi_true(1,:) = rand(1,N)*90/57.3;
+phi_true(1,:) = rand(1,N)*360/57.3;
 for i=1:N
     phi_true(1,i) = eval(['Robot',num2str(i),'_Groundtruth(1,4);']);
 end  
 phi_est = phi_true;                 % estimated orientations
-phi_est(1,:) = phi_true(1,:) + rand(1,N)*2/57.3; 
+phi_est(1,:) = phi_true(1,:) + randn(1,N)*2/57.3; 
 
 P_DR = cell(k_f,1);               % collective covariance for dead reckoning
 P_CEKF_subMOD = cell(k_f,1);      % collective covariance matrix for standard EKF with submodular method
