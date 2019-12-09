@@ -31,6 +31,6 @@ sigma_W = zeros(1,N);
 for i = 1:N
     sigma_W(i) = sqrt(0.345);
 %     sigma_W(i) = 0.0384;
-%     sigma_W(i) = 0.2*sqrt(W(i)^2);
+%     sigma_W(i) = 0.2*sqrt(W(i)^2);2.
 end
 end

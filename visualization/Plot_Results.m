@@ -248,10 +248,12 @@ xlabel('Time /s','fontsize',14);
 figure; hold on; box on;
 timing_subOPT = timing_subOPT(timing_subOPT>0);
 timing_subMOD = timing_subMOD(timing_subMOD>0);
-bar(categorical({'subOPT','subModular'}),[mean(timing_subOPT),mean(timing_subMOD)]);
+timing_subOPT_multi = timing_subOPT_multi(timing_subOPT_multi>0);
+timing_subMOD_multi = timing_subMOD_multi(timing_subMOD_multi>0);
+bar(categorical({'subOPT','subMOD','subOPT_{multi}','subMOD_{multi}'}),[mean(timing_subOPT),mean(timing_subMOD),mean(timing_subOPT_multi),mean(timing_subMOD_multi)]);
 ylabel('Running time per robot /ms');
 set(gca,'fontsize',14);
-title(['q^i = ',num2str(q_i)]);
+title(['q^i = ',num2str(q_i),' ,q^i_{multi} = ',num2str(q_i_multi),' ,N = ',num2str(N)]);
 % legend('SubOPT','SubModular');
 
 %% Communication times evolution

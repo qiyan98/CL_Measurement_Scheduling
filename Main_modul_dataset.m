@@ -355,7 +355,7 @@ for k=1:k_f
             clear cur_set cur_sensor_allowed;
             
             q_i = 1; % number of measurements allowed per time step
-            q_i_multi = 2; % q_i_multi must be larger than q_i_multi !!!
+            q_i_multi = 3; % q_i_multi must be larger than q_i_multi !!!
             
                         % for submodular greedy sensor selection, q_i
             tic;
@@ -583,7 +583,8 @@ for k=1:k_f
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subMOD,S_ab_CEKF_subMOD,r_a_CEKF_subMOD] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subMOD{k+1,cur_a},X_hat_CEKF_subMOD{k+1,cur_b},phi_est(k+1,:),P_CEKF_subMOD{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subMOD(k+1) = comm_CEKF_subMOD(k+1) + N - 1;
-                        bytes_subMOD(k+1) = bytes_subMOD(k+1) + 16 + 58*(N-1);
+%                         bytes_subMOD(k+1) = bytes_subMOD(k+1) + 16 + 58*(N-1);
+                        bytes_subMOD(k+1) = bytes_subMOD(k+1) + 16 + 64*(N-1);
                         [r_a_bar,Gamma_col] = Update_SAEKF_dataset(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_SAEKF_subMOD{k+1,cur_a},P_SAEKF_subMOD{k+1,cur_a},Phi_SAEKF_subMOD{k+1,cur_a},X_hat_SAEKF_subMOD{k+1,cur_b},P_SAEKF_subMOD{k+1,cur_b},Phi_SAEKF_subMOD{k+1,cur_b},phi_est(k+1,:),k,Noise_extero(index_noise_extero,:));
                         comm_SAEKF_subMOD(k+1) = comm_SAEKF_subMOD(k+1) + 1;
                     end
@@ -592,7 +593,7 @@ for k=1:k_f
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subMOD,S_ab_CEKF_subMOD,r_a_CEKF_subMOD] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subMOD{k+1,cur_a},X_hat_CEKF_subMOD{k+1,cur_b},phi_est(k+1,:),P_CEKF_subMOD{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subMOD(k+1) = comm_CEKF_subMOD(k+1) + N - 1;
-                        bytes_subMOD(k+1) = bytes_subMOD(k+1) + 16 + 58*(N-1);
+                        bytes_subMOD(k+1) = bytes_subMOD(k+1) + 16 + 64*(N-1);
                         [r_a_bar,Gamma_col] = Update_SAEKF_dataset(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_SAEKF_subMOD{k+1,cur_a},P_SAEKF_subMOD{k+1,cur_a},Phi_SAEKF_subMOD{k+1,cur_a},X_hat_SAEKF_subMOD{k+1,cur_b},P_SAEKF_subMOD{k+1,cur_b},Phi_SAEKF_subMOD{k+1,cur_b},phi_est(k+1,:),k,Noise_extero(index_noise_extero,:));
                         comm_SAEKF_subMOD(k+1) = comm_SAEKF_subMOD(k+1) + 1;
                     end
@@ -638,14 +639,14 @@ for k=1:k_f
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subMOD_multi,S_ab_CEKF_subMOD_multi,r_a_CEKF_subMOD_multi] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subMOD_multi{k+1,cur_a},X_hat_CEKF_subMOD_multi{k+1,cur_b},phi_est(k+1,:),P_CEKF_subMOD_multi{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subMOD_multi(k+1) = comm_CEKF_subMOD_multi(k+1) + N - 1;
-                        bytes_subMOD_multi(k+1) = bytes_subMOD_multi(k+1) + 16 + 58*(N-1);
+                        bytes_subMOD_multi(k+1) = bytes_subMOD_multi(k+1) + 16 + 64*(N-1);
                     end
                     index_noise_extero = index_noise_extero + 1;
                 elseif ii_a == 1 % the first measurement at time step k
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subMOD_multi,S_ab_CEKF_subMOD_multi,r_a_CEKF_subMOD_multi] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subMOD_multi{k+1,cur_a},X_hat_CEKF_subMOD_multi{k+1,cur_b},phi_est(k+1,:),P_CEKF_subMOD_multi{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subMOD_multi(k+1) = comm_CEKF_subMOD_multi(k+1) + N - 1;
-                        bytes_subMOD_multi(k+1) = bytes_subMOD_multi(k+1) + 16 + 58*(N-1);
+                        bytes_subMOD_multi(k+1) = bytes_subMOD_multi(k+1) + 16 + 64*(N-1);
                     end
                     index_noise_extero = index_noise_extero + 1;
                 end
@@ -758,14 +759,14 @@ for k=1:k_f
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subOPT,S_ab_CEKF_subOPT,r_a_CEKF_subOPT] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subOPT{k+1,cur_a},X_hat_CEKF_subOPT{k+1,cur_b},phi_est(k+1,:),P_CEKF_subOPT{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subOPT(k+1) = comm_CEKF_subOPT(k+1) + N - 1;
-                        bytes_subOPT(k+1) = bytes_subOPT(k+1) + 48 + 58*(N-1);
+                        bytes_subOPT(k+1) = bytes_subOPT(k+1) + 48 + 64*(N-1);
                     end
                     index_noise_extero = index_noise_extero + 1;
                 elseif ii_a == 1 % the first measurement at time step k
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subOPT,S_ab_CEKF_subOPT,r_a_CEKF_subOPT] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subOPT{k+1,cur_a},X_hat_CEKF_subOPT{k+1,cur_b},phi_est(k+1,:),P_CEKF_subOPT{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subOPT(k+1) = comm_CEKF_subOPT(k+1) + N - 1;
-                        bytes_subOPT(k+1) = bytes_subOPT(k+1) + 48 + 58*(N-1);
+                        bytes_subOPT(k+1) = bytes_subOPT(k+1) + 48 + 64*(N-1);
                     end
                     index_noise_extero = index_noise_extero + 1;
                 end
@@ -799,14 +800,14 @@ for k=1:k_f
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subOPT_multi,S_ab_CEKF_subOPT_multi,r_a_CEKF_subOPT_multi] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subOPT_multi{k+1,cur_a},X_hat_CEKF_subOPT_multi{k+1,cur_b},phi_est(k+1,:),P_CEKF_subOPT_multi{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subOPT_multi(k+1) = comm_CEKF_subOPT_multi(k+1) + N - 1;
-                        bytes_subOPT_multi(k+1) = bytes_subOPT_multi(k+1) + 48 + 58*(N-1);
+                        bytes_subOPT_multi(k+1) = bytes_subOPT_multi(k+1) + 48 + 64*(N-1);
                     end
                     index_noise_extero = index_noise_extero + 1;
                 elseif ii_a == 1 % the first measurement at time step k
                     if flag_robot{cur_a} == 1
                         [K_CEKF_subOPT_multi,S_ab_CEKF_subOPT_multi,r_a_CEKF_subOPT_multi] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_subOPT_multi{k+1,cur_a},X_hat_CEKF_subOPT_multi{k+1,cur_b},phi_est(k+1,:),P_CEKF_subOPT_multi{k+1},k,Noise_extero(index_noise_extero,:));
                         comm_CEKF_subOPT_multi(k+1) = comm_CEKF_subOPT_multi(k+1) + N - 1;
-                        bytes_subOPT_multi(k+1) = bytes_subOPT_multi(k+1) + 48 + 58*(N-1);
+                        bytes_subOPT_multi(k+1) = bytes_subOPT_multi(k+1) + 48 + 64*(N-1);
                     end
                     index_noise_extero = index_noise_extero + 1;
                 end

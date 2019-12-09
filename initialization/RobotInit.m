@@ -11,7 +11,7 @@ function [X0,X_hat0,P0,N] = RobotInit()
 
 %% Robot number
 N = 9; % for simulation
-% N = 5; % for dataset
+% N = 15; % for test scalibility
 R2D = 180/pi;
 D2R = pi/180;
 
@@ -26,7 +26,16 @@ X0{6} = [9,3]';
 X0{7} = [3,6]';
 X0{8} = [6,6]';
 X0{9} = [9,6]';
-X0{10}= [20,-20]';
+X0{10} = [10,10]';
+X0{11} = [13,10]';
+X0{12} = [16,10]';
+X0{13} = [19,10]';
+X0{14} = [10,13]';
+X0{15} = [13,13]';
+X0{16} = [16,13]';
+X0{17} = [19,13]';
+X0{18} = [16,16]';
+
 
 %% Robot Covariance P{ID}
 P_coll = cell(1,N);

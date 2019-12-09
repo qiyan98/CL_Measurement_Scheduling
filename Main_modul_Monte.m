@@ -326,8 +326,8 @@ for Monte_index = 1:M
                 end
                 clear cur_set cur_sensor_allowed;
                 
-                q_i = 1; % number of measurements allowed per time step
-                q_i_multi = 3; % q_i_multi must be larger than q_i_multi !!!
+                q_i = 5; % number of measurements allowed per time step
+                q_i_multi = 7; % q_i_multi must be larger than q_i_multi !!!
                 
                 % for submodular greedy sensor selection, q_i
                 tic;

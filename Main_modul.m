@@ -315,7 +315,7 @@ for k=1:k_f
             clear cur_set cur_sensor_allowed;
             
             q_i = 1; % number of measurements allowed per time step
-            q_i_multi = 5; % q_i_multi must be larger than q_i_multi !!!
+            q_i_multi = 8; % q_i_multi must be larger than q_i_multi !!!
             
             % for submodular greedy sensor selection, q_i
             tic;

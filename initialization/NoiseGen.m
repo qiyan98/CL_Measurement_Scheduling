@@ -9,7 +9,7 @@ function NoiseGen()
 length_noise=floor(2e2*k_f+1);
 [~,~,~,N] = RobotInit();
 
-Noise_extero = zeros(length_noise,6); % first 3 for rel-mea., last 3 columns for abs-mea
+Noise_extero = zeros(N*length_noise,6); % first 3 for rel-mea., last 3 columns for abs-mea
 Noise_propa_v = zeros(length_noise,N);
 Noise_propa_w = zeros(length_noise,N);
 for i=1:length_noise
