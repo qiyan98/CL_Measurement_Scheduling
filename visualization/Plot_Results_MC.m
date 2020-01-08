@@ -103,19 +103,26 @@ box on;
 hold on;
 
 ind_marker_dense = 1:length(Tk);
-ind_marker_sparse = 1:length(Tk);
+ind_marker_sparse = 1:20:length(Tk);
 
+plot(Tk,sum(RMSE_CEKF_subMOD_mont,2),'--','linewidth',2,'Color', 'k','markerindices',ind_marker_dense);
+plot(Tk,sum(RMSE_CEKF_subMOD_multi_mont,2),'--','linewidth',4,'Color', 'k','markerindices',ind_marker_dense);
 
-plot(Tk,sum(RMSE_CEKF_subMOD_mont,2),'--','linewidth',2,'Color', 'b','markerindices',ind_marker_dense);
-plot(Tk,sum(RMSE_CEKF_subMOD_multi_mont,2),'--','linewidth',4,'Color', '#0072BD','markerindices',ind_marker_dense);
-plot(Tk,sum(RMSE_CEKF_subOPT_mont,2),'-','linewidth',2,'Color', 'y','markerindices',ind_marker_sparse,'markersize',10);
-plot(Tk,sum(RMSE_CEKF_subOPT_multi_mont,2),'-','linewidth',4,'Color','#EDB120','markerindices',ind_marker_sparse,'markersize',10);
+ind_marker_sparse = 1:3:length(Tk);
+plot(Tk,sum(RMSE_CEKF_subOPT_mont,2),'.','linewidth',2,'Color', 0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',9);
+ind_marker_sparse = 1:14:length(Tk);
+plot(Tk,sum(RMSE_CEKF_subOPT_multi_mont,2),'.','linewidth',5,'Color',0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',12);
 
-plot(Tk,sum(RMSE_CEKF_Dense_mont,2),'k--','linewidth',2,'markerindices',ind_marker_sparse,'markersize',10);
-plot(Tk,sum(RMSE_DR_mont,2),'k-','linewidth',4);
+plot(Tk,sum(RMSE_CEKF_Random_mont,2),'--','linewidth',2,'Color', 'b','markerindices',ind_marker_dense);
+plot(Tk,sum(RMSE_CEKF_Random_multi_mont,2),'--','linewidth',4,'Color', 'b','markerindices',ind_marker_dense);
+plot(Tk,sum(RMSE_CEKF_Dense_mont,2),'k-','linewidth',4,'markerindices',ind_marker_sparse,'markersize',14);
 
-legend('[19],q^i = 1','[19], q^i = 3','our, q^i = 1','our, q^i = 3','q^i = 8','DR',...
-    'position',[0.2 0.65 0.1 0.2],'units','normalized');
+ind_marker_sparse = 1:20:length(Tk);
+plot(Tk,sum(RMSE_DR_mont,2),'r--*','linewidth',2,'markerindices',ind_marker_sparse,'markersize',6);
+
+legend('[19], q^i = 1','[19], q^i = 3','Alg. 1, q^i = 1','Alg. 1, q^i = 3',...
+    'random, q^i = 1', 'random, q^i = 3','q^i = 8','DR',...
+    'position',[0.18 0.6 0.15 0.2],'units','normalized');
 
 grid on;
 
@@ -147,7 +154,8 @@ xlabel('Time (s)',...
 'FontSize',28,...
 'FontName','Times')
 
-saveas(gcf,'fig_output\rmse_MC','epsc');
+% saveas(gcf,'fig_output\rmse_MC','epsc');
+saveas(gcf,'fig_output\rmse_MC','pdf');
 %% D-Accuracy
 figure;
 ha = tightPlots(1,1,6.85,[5 3],[0.3 0.3],[0.4 0.3],[0.5 0.4],'inch');
@@ -160,12 +168,15 @@ plot(Tk,D_ACC_SAEKF_subMOD_mont,'linewidth',1);
 plot(Tk,D_ACC_CEKF_subOPT_mont,'linewidth',1);
 plot(Tk,D_ACC_CEKF_subMOD_multi_mont,'linewidth',1);
 plot(Tk,D_ACC_CEKF_subOPT_multi_mont,'linewidth',1)
+plot(Tk,D_ACC_CEKF_Random_mont,'linewidth',1);
+plot(Tk,D_ACC_CEKF_Random_multi_mont,'linewidth',1);
 plot(Tk,D_ACC_DR_mont,'linewidth',1);
 xlim([0 t_f]);
 ylabel('D-accuracy/m','fontsize',12);
 xlabel('Time/s','fontsize',12);
 %     title(['Robot ',num2str(i)],'fontsize',14);
-h_lgd = legend('Dense-CL','OPT-CL','SubOPT-CL','OPT-Multi-CL','SubOPT-Multi-CL','DR','fontsize',10,'location','best');
+h_lgd = legend('Dense-CL','OPT-CL','SubOPT-CL','OPT-Multi-CL','SubOPT-Multi-CL',...
+    'Random','Rondom-multi','DR','fontsize',10,'location','best');
 % set(h_lgd,'position',[0.895 0.4 0.01 0.2],'Units','normalized');
 %% Error with 3-sigma boundaries in X-direction
 % figure;
@@ -245,14 +256,16 @@ set(gcf,'color','white');
 box on;
 hold on;
 
-ind_marker_dense = 1:length(Tk);
-ind_marker_sparse = 1:3:length(Tk);
-plot(Tk,log(Det_CEKF_Dense_mont),'k-','linewidth',4);
+ind_marker_dense = 1:4:length(Tk);
+ind_marker_sparse = 1:11:length(Tk);
+plot(Tk,log(Det_CEKF_Dense_mont),'k-','linewidth',5);
 plot(Tk,log(Det_CEKF_subMOD_mont),'--','linewidth',2,'Color', 'k','markerindices',ind_marker_dense);
-plot(Tk,log(Det_CEKF_subOPT_mont),'.','linewidth',2,'Color', 0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',9);
-plot(Tk,log(Det_CEKF_subMOD_multi_mont),'--','linewidth',4,'Color', 'k','markerindices',ind_marker_dense);
-plot(Tk,log(Det_CEKF_subOPT_multi_mont),'.','linewidth',4,'Color',0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',14);
+plot(Tk,log(Det_CEKF_subOPT_mont),'.','linewidth',2,'Color', 0.8*[0.75 0.75 0.75],'markerindices',ind_marker_dense,'markersize',9);
+plot(Tk,log(Det_CEKF_subMOD_multi_mont),'--','linewidth',5,'Color', 'k','markerindices',ind_marker_dense);
+plot(Tk,log(Det_CEKF_subOPT_multi_mont),'.','linewidth',5,'Color',0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',11);
 
+plot(Tk,log(Det_CEKF_Random_mont),'--','linewidth',2,'Color', 'b','markerindices',ind_marker_dense);
+plot(Tk,log(Det_CEKF_Random_multi_mont),'--','linewidth',5,'Color', 'b','markerindices',ind_marker_dense);
 ylim([-150 -80]);
 
 grid on;
@@ -284,6 +297,7 @@ xlabel('Time (s)',...
 'FontName','Times')
 
 saveas(gcf,'fig_output\logdet_MC','epsc');
+saveas(gcf,'fig_output\logdet_MC','pdf');
 %% Communication times evolution
 % figure;
 % subplot(2,1,1);

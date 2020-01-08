@@ -105,10 +105,15 @@ plot(Tk,sum(RMSE_CEKF_subMOD_multi,2),'--','linewidth',4,'Color', '#0072BD','mar
 plot(Tk,sum(RMSE_CEKF_subOPT,2),'-','linewidth',2,'Color', 'y','markerindices',ind_marker_sparse,'markersize',10);
 plot(Tk,sum(RMSE_CEKF_subOPT_multi,2),'-','linewidth',4,'Color','#EDB120','markerindices',ind_marker_sparse,'markersize',10);
 
+% plot(Tk,sum(RMSE_CEKF_Random,2),'-','linewidth',2,'Color', 'r','markerindices',ind_marker_sparse,'markersize',10);
+% plot(Tk,sum(RMSE_CEKF_Random_multi,2),'-','linewidth',4,'Color','r','markerindices',ind_marker_sparse,'markersize',10);
+
 plot(Tk,sum(RMSE_CEKF_Dense,2),'k--','linewidth',2,'markerindices',ind_marker_sparse,'markersize',10);
 plot(Tk,sum(RMSE_DR,2),'k-','linewidth',4);
 
-legend('[19],q^i = 1','[19], q^i = 3','our, q^i = 1','our, q^i = 3','dense mea.','DR',...
+%     'random, q^i = 1','random, q^i = 3',...
+legend('[19],q^i = 1','[19], q^i = 3','our, q^i = 1','our, q^i = 3',...
+    'dense mea.','DR',...
     'position',[0.2 0.8 0.1 0.01],'units','normalized');
 
 set(gca,'fontsize',16);
@@ -236,13 +241,18 @@ figure;
 ha = tightPlots(1,1,3.3*3.9,[3.3 1.8],[0 0],[0 0],[0 0],'inch');
 set(gcf,'color','white'); box on; hold on;
 
-ind_marker_dense = 1:length(Tk);
-ind_marker_sparse = 1:3:length(Tk);
+ind_marker_dense = 1:3:length(Tk);
+
 plot(Tk,Logdet_CEKF_Dense,'k-','linewidth',4);
+
+ind_marker_sparse = 1:30:length(Tk);
+plot(Tk,Logdet_CEKF_Random,'--','linewidth',2,'Color', 'b','markerindices',ind_marker_sparse,'markersize',15);
+plot(Tk,Logdet_CEKF_Random_multi,'--','linewidth',4,'Color', 'b','markerindices',ind_marker_sparse,'markersize',20);
+ind_marker_sparse = 1:10:length(Tk);
 plot(Tk,Logdet_CEKF_subMOD,'--','linewidth',2,'Color', 'k','markerindices',ind_marker_dense);
-plot(Tk,Logdet_CEKF_subOPT,'.','linewidth',2,'Color', 0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',9);
+plot(Tk,Logdet_CEKF_subOPT,'.','linewidth',2,'Color', 0.8*[0.75 0.75 0.75],'markerindices',ind_marker_dense,'markersize',9);
 plot(Tk,Logdet_CEKF_subMOD_multi,'--','linewidth',4,'Color', 'k','markerindices',ind_marker_dense);
-plot(Tk,Logdet_CEKF_subOPT_multi,'.','linewidth',4,'Color',0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',14);
+plot(Tk,Logdet_CEKF_subOPT_multi,'.','linewidth',4,'Color',0.8*[0.75 0.75 0.75],'markerindices',ind_marker_sparse,'markersize',10);
 
 ylim([-95 -55]);
 grid on;
@@ -275,6 +285,7 @@ xlabel('Time (s)',...
 'FontName','Times')
 
 saveas(gcf,'fig_output\logdet_dataset','epsc');
+saveas(gcf,'fig_output\logdet_dataset','pdf');
 %% Computational timing
 figure; hold on; box on;
 timing_subOPT = timing_subOPT(timing_subOPT>0);

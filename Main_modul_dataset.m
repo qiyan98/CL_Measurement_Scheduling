@@ -89,6 +89,7 @@ X_hat_CEKF_subMOD = cell(k_f,N);    % states by standard EKF with submodular met
 X_hat_SAEKF_subMOD = cell(k_f,N);   % states by server-assisted EKF with submodular method
 X_hat_CEKF_Dense = cell(k_f,N);     % states by standard EKF with dense graph
 X_hat_CEKF_Random = cell(k_f,N);    % states by standard EKF with random graph
+X_hat_CEKF_Random_multi = cell(k_f,N);    % states by standard EKF with random graph
 X_hat_CEKF_subOPT = cell(k_f,N);    % states by standard EKF with sub-optimal scheduling
 X_hat_CEKF_subMOD_multi = cell(k_f,N);       % states by standard EKF with OPT (q^i > 1)
 X_hat_CEKF_subOPT_multi = cell(k_f,N);    % states by standard EKF with sub-optimal scheduling (q^i > 1)
@@ -107,6 +108,7 @@ P_SAEKF_subMOD = cell(k_f,N);     % robot-wise covariance matrix for SA-EKF with
 Phi_SAEKF_subMOD = cell(k_f,N);   % robot-wise auxiliary matrix for SA-EKF with submodular method
 P_CEKF_Dense = cell(k_f,1);       % collective covariance matrix for standard EKF with dense graph
 P_CEKF_Random = cell(k_f,1);      % collective covariance matrix for standard EKF with random graph
+P_CEKF_Random_multi = cell(k_f,1);% collective covariance matrix for standard EKF with random graph
 P_CEKF_subOPT = cell(k_f,1);      % collective covariance matrix for standard EKF with sub-optimal graph
 P_CEKF_subMOD_multi = cell(k_f,1);    % collective covariance matrix for standard EKF with OPT (q^i > 1)
 P_CEKF_subOPT_multi = cell(k_f,1); % collective covariance matrix for standard EKF with sub-optimal graph (q^i > 1)
@@ -115,6 +117,7 @@ flag_robot = cell(N,1); % flags for each robot observation
 mea_schedule = cell(k_f,1);
 mea_schedule_OPT = cell(k_f,1);
 mea_schedule_Random = cell(k_f,1);
+mea_schedule_Random_multi = cell(k_f,1);
 mea_schedule_subOPT = cell(k_f,1);
 mea_schedule_subMOD_multi = cell(k_f,1);
 mea_schedule_subOPT_multi = cell(k_f,1);
@@ -127,14 +130,15 @@ for i=1:N
     X_hat_SAEKF_subMOD{1,i} = X_hat0{i};
     X_hat_CEKF_Dense{1,i} = X_hat0{i};
     X_hat_CEKF_Random{1,i} = X_hat0{i};
+    X_hat_CEKF_Random_multi{1,i} = X_hat0{i};
     X_hat_CEKF_subOPT{1,i} = X_hat0{i};
     X_hat_CEKF_subMOD_multi{1,i} = X_hat0{i};
     X_hat_CEKF_subOPT_multi{1,i} = X_hat0{i};
     flag_robot{i} = 1;
 end
 P_DR{1} = P0; P_CEKF_subMOD{1} = P0;
-P_CEKF_Dense{1} = P0; P_CEKF_Random{1} = P0; P_CEKF_subOPT{1} = P0;
-P_CEKF_subMOD_multi{1} = P0; P_CEKF_subOPT_multi{1} = P0;
+P_CEKF_Dense{1} = P0; P_CEKF_Random{1} = P0; P_CEKF_Random_multi{1} = P0;
+P_CEKF_subOPT{1} = P0; P_CEKF_subMOD_multi{1} = P0; P_CEKF_subOPT_multi{1} = P0;
 for i=1:N
     P_SAEKF_subMOD{1,i} = P0(2*i-1:2*i,2*i-1:2*i);
     Phi_SAEKF_subMOD{1,i} = eye(2);
@@ -151,6 +155,7 @@ comm_CEKF_subMOD = zeros(k_f,1);
 comm_SAEKF_subMOD = zeros(k_f,1);
 comm_CEKF_Dense = zeros(k_f,1);
 comm_CEKF_Random = zeros(k_f,1);
+comm_CEKF_Random_multi = zeros(k_f,1);
 comm_CEKF_subOPT = zeros(k_f,1);
 comm_CEKF_subMOD_multi = zeros(k_f,1);
 comm_CEKF_subOPT_multi = zeros(k_f,1);
@@ -161,6 +166,7 @@ Three_sigma_CEKF_subMOD = zeros(2,k_f,N);
 Three_sigma_SAEKF_subMOD = zeros(2,k_f,N);
 Three_sigma_CEKF_Dense = zeros(2,k_f,N);
 Three_sigma_CEKF_Random = zeros(2,k_f,N);
+Three_sigma_CEKF_Random_multi = zeros(2,k_f,N);
 Three_sigma_CEKF_subOPT = zeros(2,k_f,N);
 Three_sigma_CEKF_subMOD_multi = zeros(2,k_f,N);
 Three_sigma_CEKF_subOPT_multi = zeros(2,k_f,N);
@@ -191,6 +197,7 @@ for k=1:k_f
             Three_sigma_SAEKF_subMOD(i,k,j) = 3*sqrt(P_SAEKF_subMOD{k,j}(i,i));
             Three_sigma_CEKF_Dense(i,k,j) = 3*sqrt(P_CEKF_Dense{k}(2*j+i-2,2*j+i-2));
             Three_sigma_CEKF_Random(i,k,j) = 3*sqrt(P_CEKF_Random{k}(2*j+i-2,2*j+i-2));
+            Three_sigma_CEKF_Random_multi(i,k,j) = 3*sqrt(P_CEKF_Random_multi{k}(2*j+i-2,2*j+i-2));
             Three_sigma_CEKF_subOPT(i,k,j) = 3*sqrt(P_CEKF_subOPT{k}(2*j+i-2,2*j+i-2));
             Three_sigma_CEKF_subMOD_multi(i,k,j) = 3*sqrt(P_CEKF_subMOD_multi{k}(2*j+i-2,2*j+i-2));
             Three_sigma_CEKF_subOPT_multi(i,k,j) = 3*sqrt(P_CEKF_subOPT_multi{k}(2*j+i-2,2*j+i-2));
@@ -207,6 +214,7 @@ for k=1:k_f
     [X_hatProp_SAEKF_subMOD,P_Prop_SAEKF_subMOD,Phi_Prop_SAEKF_subMOD,Q_Prop_SAEKF_subMOD] = Prop_SAEKF_dataset(X_hat_SAEKF_subMOD(k,:),phi_est(k,:),P_SAEKF_subMOD(k,:),Phi_SAEKF_subMOD(k,:),k,sigma_V,sigma_phi);
     [X_hatProp_CEKF_Dense,P_Prop_CEKF_Dense] = Prop_CEKF_dataset(X_hat_CEKF_Dense(k,:),phi_est(k,:),P_CEKF_Dense{k},k,sigma_V,sigma_phi);
     [X_hatProp_CEKF_Random,P_Prop_CEKF_Random] = Prop_CEKF_dataset(X_hat_CEKF_Random(k,:),phi_est(k,:),P_CEKF_Random{k},k,sigma_V,sigma_phi);
+    [X_hatProp_CEKF_Random_multi,P_Prop_CEKF_Random_multi] = Prop_CEKF_dataset(X_hat_CEKF_Random_multi(k,:),phi_est(k,:),P_CEKF_Random_multi{k},k,sigma_V,sigma_phi);
     [X_hatProp_CEKF_subOPT,P_Prop_CEKF_subOPT] = Prop_CEKF_dataset(X_hat_CEKF_subOPT(k,:),phi_est(k,:),P_CEKF_subOPT{k},k,sigma_V,sigma_phi);
     [X_hatProp_CEKF_subMOD_multi,P_Prop_CEKF_subMOD_multi] = Prop_CEKF_dataset(X_hat_CEKF_subMOD_multi(k,:),phi_est(k,:),P_CEKF_subMOD_multi{k},k,sigma_V,sigma_phi);
     [X_hatProp_CEKF_subOPT_multi,P_Prop_CEKF_subOPT_multi] = Prop_CEKF_dataset(X_hat_CEKF_subOPT_multi(k,:),phi_est(k,:),P_CEKF_subOPT_multi{k},k,sigma_V,sigma_phi);
@@ -216,6 +224,7 @@ for k=1:k_f
     X_hat_SAEKF_subMOD(k+1,:) = X_hatProp_SAEKF_subMOD; P_SAEKF_subMOD(k+1,:) = P_Prop_SAEKF_subMOD; Phi_SAEKF_subMOD(k+1,:) = Phi_Prop_SAEKF_subMOD;
     X_hat_CEKF_Dense(k+1,:) = X_hatProp_CEKF_Dense; P_CEKF_Dense{k+1} = P_Prop_CEKF_Dense;
     X_hat_CEKF_Random(k+1,:) = X_hatProp_CEKF_Random; P_CEKF_Random{k+1} = P_Prop_CEKF_Random;
+    X_hat_CEKF_Random_multi(k+1,:) = X_hatProp_CEKF_Random_multi; P_CEKF_Random_multi{k+1} = P_Prop_CEKF_Random_multi;
     X_hat_CEKF_subOPT(k+1,:) = X_hatProp_CEKF_subOPT; P_CEKF_subOPT{k+1} = P_Prop_CEKF_subOPT;
     X_hat_CEKF_subMOD_multi(k+1,:) = X_hatProp_CEKF_subMOD_multi; P_CEKF_subMOD_multi{k+1} = P_Prop_CEKF_subMOD_multi;
     X_hat_CEKF_subOPT_multi(k+1,:) = X_hatProp_CEKF_subOPT_multi; P_CEKF_subOPT_multi{k+1} = P_Prop_CEKF_subOPT_multi;
@@ -224,6 +233,7 @@ for k=1:k_f
     comm_SAEKF_subMOD(k+1) = comm_SAEKF_subMOD(k);
     comm_CEKF_Dense(k+1) = comm_CEKF_Dense(k);
     comm_CEKF_Random(k+1) = comm_CEKF_Random(k);
+    comm_CEKF_Random_multi(k+1) = comm_CEKF_Random_multi(k);
     comm_CEKF_subOPT(k+1) = comm_CEKF_subOPT(k);
     comm_CEKF_subMOD_multi(k+1) = comm_CEKF_subMOD_multi(k);
     comm_CEKF_subOPT_multi(k+1) = comm_CEKF_subOPT_multi(k);
@@ -356,7 +366,6 @@ for k=1:k_f
             
             q_i = 1; % number of measurements allowed per time step
             q_i_multi = 3; % q_i_multi must be larger than q_i_multi !!!
-            
                         % for submodular greedy sensor selection, q_i
             tic;
             set_subMOD = cell(length(master_robot_allowed),1);
@@ -443,7 +452,45 @@ for k=1:k_f
             % end of submodular greedy sensor selection, q_i_multi
             
             % for random sensor selection
-            set_random = randi(num_sensor,1,r_sensor);
+            set_random = [];
+            for aa = 1:length(master_robot_allowed)
+                b_hist = [];
+                for bb = 1:q_i
+                    while 1
+                        b = randi(N,1);
+                        if b ~= aa && isempty(intersect(b_hist,b))
+                            b_hist = [b_hist;b];
+                            break
+                        end
+                    end
+                    for tmp_i = 1:length(ab_set)
+                        if ab_set(tmp_i,:) == [aa,b]
+                            break;
+                        end
+                    end
+                    set_random = [set_random;tmp_i];
+                end
+            end
+            
+            set_random_multi = [];
+            for aa = 1:length(master_robot_allowed)
+                b_hist = [];
+                for bb = 1:q_i_multi
+                    while 1
+                        b = randi(N,1);
+                        if b ~= aa && isempty(intersect(b_hist,b))
+                            b_hist = [b_hist;b];
+                            break
+                        end
+                    end
+                    for tmp_i = 1:length(ab_set)
+                        if ab_set(tmp_i,:) == [aa,b]
+                            break;
+                        end
+                    end
+                    set_random_multi = [set_random_multi;tmp_i];
+                end
+            end
             
             % for our proposed sub-optimal selection, q_i
             tic;
@@ -522,6 +569,7 @@ for k=1:k_f
             set_subMOD = [set_subMOD N*(N-1)+set_abs_mea];
             set_subMOD_multi = [set_subMOD_multi N*(N-1)+set_abs_mea];
             set_random = [set_random N*(N-1)+set_abs_mea];
+            set_random_multi = [set_random_multi N*(N-1)+set_abs_mea];
             set_dense = [1:N*(N-1) N*(N-1)+set_abs_mea];
             set_subopt = [set_subopt N*(N-1)+set_abs_mea];
             set_subopt_multi = [set_subopt_multi N*(N-1)+set_abs_mea];
@@ -530,7 +578,8 @@ for k=1:k_f
             %             set_random = set_dense;
             %             set_subopt = set_dense;
             
-            MeaMat_subMOD = []; MeaMat_random = []; MeaMat_dense = []; MeaMat_subOPT = [];
+            MeaMat_subMOD = []; MeaMat_random = []; MeaMat_random_multi = [];
+            MeaMat_dense = []; MeaMat_subOPT = [];
             MeaMat_subMOD_multi = []; MeaMat_subOPT_multi = [];
             for i=1:length(set_subMOD)
                 MeaMat_subMOD = [MeaMat_subMOD; i ab_set(set_subMOD(i),:)];
@@ -540,6 +589,9 @@ for k=1:k_f
             end
             for i=1:length(set_random)
                 MeaMat_random = [MeaMat_random;i ab_set(set_random(i),:)];
+            end
+            for i=1:length(set_random_multi)
+                MeaMat_random_multi = [MeaMat_random_multi;i ab_set(set_random_multi(i),:)];
             end
             for i=1:length(set_dense)
                 MeaMat_dense = [MeaMat_dense;i ab_set(set_dense(i),:)];
@@ -556,6 +608,8 @@ for k=1:k_f
             b_set_subMOD_multi = MeaMat_subMOD_multi(:,3);
             a_set_random = MeaMat_random(:,2);
             b_set_random = MeaMat_random(:,3);
+            a_set_random_multi = MeaMat_random_multi(:,2);
+            b_set_random_multi = MeaMat_random_multi(:,3);
             a_set_dense = MeaMat_dense(:,2);
             b_set_dense = MeaMat_dense(:,3);
             a_set_subOPT = MeaMat_subOPT(:,2);
@@ -705,6 +759,45 @@ for k=1:k_f
         end
         %%%%% end of ii_a with respect to randomized MeaMat %%%%%
         
+        %%%%% ii_a - relative measurment order for multiple random edges %%%%%
+        for ii_a = 1:length(a_set_random_multi)
+            cur_a = MeaMat_random_multi(ii_a,2);
+            cur_b = MeaMat_random_multi(ii_a,3);
+            if size_RelMea_Table(2) > 2 % more than 2 columns
+                miss_set = MeaMat_random_multi(ii_a,4:end);
+            else
+                miss_set = 0;
+            end
+            % double check the measurement period
+            if (k>=RelMea_Table{1,j_mea}(1,1) && k<=RelMea_Table{1,j_mea}(1,2))
+                if flag_seq == 1 && ii_a > 1 % not the first measurement at time step k
+                    if flag_robot{cur_a} == 1
+                        [K_CEKF_Random_multi,S_ab_CEKF_Random_multi,r_a_CEKF_Random_multi] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_Random_multi{k+1,cur_a},X_hat_CEKF_Random_multi{k+1,cur_b},phi_est(k+1,:),P_CEKF_Random_multi{k+1},k,Noise_extero(index_noise_extero,:));
+                        comm_CEKF_Random_multi(k+1) = comm_CEKF_Random_multi(k+1) + N - 1;
+                    end
+                    index_noise_extero = index_noise_extero + 1;
+                elseif ii_a == 1 % the first measurement at time step k
+                    if flag_robot{cur_a} == 1
+                        [K_CEKF_Random_multi,S_ab_CEKF_Random_multi,r_a_CEKF_Random_multi] = Update_CEKF(cur_a,cur_b,X_true{k+1,cur_a},X_true{k+1,cur_b},phi_true(k+1,:),X_hat_CEKF_Random_multi{k+1,cur_a},X_hat_CEKF_Random_multi{k+1,cur_b},phi_est(k+1,:),P_CEKF_Random_multi{k+1},k,Noise_extero(index_noise_extero,:));
+                        comm_CEKF_Random_multi(k+1) = comm_CEKF_Random_multi(k+1) + N - 1;
+                    end
+                    index_noise_extero = index_noise_extero + 1;
+                end
+            end
+            % update for CEKF_Random
+            if flag_robot{cur_a} == 1 % robot-to-server update is allowed
+                KK_CEKF_Random_multi = cell(1,N);
+                for i = 1:N
+                    KK_CEKF_Random_multi{i} = K_CEKF_Random_multi(2*i-1:2*i,:);
+                    if sum(i == miss_set) == 0 % robot i doesn't miss update
+                        X_hat_CEKF_Random_multi{k+1,i} = X_hat_CEKF_Random_multi{k+1,i} + KK_CEKF_Random_multi{i}*r_a_CEKF_Random_multi;
+                    end
+                end
+                P_CEKF_Random_multi{k+1} = P_CEKF_Random_multi{k+1} - K_CEKF_Random_multi*S_ab_CEKF_Random_multi*K_CEKF_Random_multi';
+            end
+        end
+        %%%%% end of ii_a with respect to randomized MeaMat %%%%%
+        
         %%%%% ii_a - relative measurment order for dense graph%%%%%
         for ii_a = 1:length(a_set_dense)
             cur_a = MeaMat_dense(ii_a,2);
@@ -840,7 +933,7 @@ end  % end of k
 XX = zeros(2,k_f+1,N); XX_hat_DR = XX;
 XX_hat_CEKF_subMOD = XX; XX_hat_SAEKF_subMOD = XX;
 XX_hat_CEKF_Dense = XX; XX_hat_CEKF_Random = XX;
-XX_hat_CEKF_subOPT = XX;
+XX_hat_CEKF_Random_multi = XX; XX_hat_CEKF_subOPT = XX;
 XX_hat_CEKF_subMOD_multi = XX; XX_hat_CEKF_subOPT_multi = XX;
 for i=1:N
     XX(:,:,i) = cell2mat(X_true(:,i)');
@@ -849,6 +942,7 @@ for i=1:N
     XX_hat_SAEKF_subMOD(:,:,i) = cell2mat(X_hat_SAEKF_subMOD(:,i)');
     XX_hat_CEKF_Dense(:,:,i) = cell2mat(X_hat_CEKF_Dense(:,i)');
     XX_hat_CEKF_Random(:,:,i) = cell2mat(X_hat_CEKF_Random(:,i)');
+    XX_hat_CEKF_Random_multi(:,:,i) = cell2mat(X_hat_CEKF_Random_multi(:,i)');
     XX_hat_CEKF_subOPT(:,:,i) = cell2mat(X_hat_CEKF_subOPT(:,i)');
     XX_hat_CEKF_subMOD_multi(:,:,i) = cell2mat(X_hat_CEKF_subMOD_multi(:,i)');
     XX_hat_CEKF_subOPT_multi(:,:,i) = cell2mat(X_hat_CEKF_subOPT_multi(:,i)');
@@ -861,6 +955,7 @@ for j=1:N % index of robot
         Three_sigma_SAEKF_subMOD(i,k,j) = 3*sqrt(P_SAEKF_subMOD{k,j}(i,i));
         Three_sigma_CEKF_Dense(i,k,j) = 3*sqrt(P_CEKF_Dense{k}(2*j+i-2,2*j+i-2));
         Three_sigma_CEKF_Random(i,k,j) = 3*sqrt(P_CEKF_Random{k}(2*j+i-2,2*j+i-2));
+        Three_sigma_CEKF_Random_multi(i,k,j) = 3*sqrt(P_CEKF_Random_multi{k}(2*j+i-2,2*j+i-2));
         Three_sigma_CEKF_subOPT(i,k,j) = 3*sqrt(P_CEKF_subOPT{k}(2*j+i-2,2*j+i-2));
         Three_sigma_CEKF_subMOD_multi(i,k,j) = 3*sqrt(P_CEKF_subMOD_multi{k}(2*j+i-2,2*j+i-2));
         Three_sigma_CEKF_subOPT_multi(i,k,j) = 3*sqrt(P_CEKF_subOPT_multi{k}(2*j+i-2,2*j+i-2));
@@ -870,31 +965,31 @@ end
 NEES_DR = zeros(1,k_f+1);
 NEES_CEKF_subMOD = NEES_DR; NEES_SAEKF_subMOD = NEES_DR;
 NEES_CEKF_Dense = NEES_DR; NEES_CEKF_Random = NEES_DR;
-NEES_CEKF_subOPT = NEES_DR;
+NEES_CEKF_Random_multi = NEES_DR; NEES_CEKF_subOPT = NEES_DR;
 NEES_CEKF_subMOD_multi = NEES_DR; NEES_CEKF_subOPT_multi = NEES_DR;
 
 Tr_DR = NEES_DR;
 Tr_CEKF_subMOD = Tr_DR; Tr_SAEKF_subMOD = Tr_DR;
 Tr_CEKF_Dense = Tr_DR; Tr_CEKF_Random = Tr_DR;
-Tr_CEKF_subOPT = Tr_DR;
+Tr_CEKF_Random_multi = Tr_DR; Tr_CEKF_subOPT = Tr_DR;
 Tr_CEKF_subMOD_multi = Tr_DR; Tr_CEKF_subOPT_multi = Tr_DR;
 
 Logdet_DR = NEES_DR;
 Logdet_CEKF_subMOD = Logdet_DR; Logdet_SAEKF_subMOD = Logdet_DR;
 Logdet_CEKF_Dense = Logdet_DR; Logdet_CEKF_Random = Logdet_DR;
-Logdet_CEKF_subOPT = Logdet_DR;
+Logdet_CEKF_Random_multi = Logdet_DR; Logdet_CEKF_subOPT = Logdet_DR;
 Logdet_CEKF_subMOD_multi = Logdet_DR; Logdet_CEKF_subOPT_multi = Logdet_DR;
 
 RMSE_DR = zeros(k_f+1,N);
 RMSE_CEKF_subMOD = RMSE_DR; RMSE_SAEKF_subMOD = RMSE_DR;
 RMSE_CEKF_Dense = RMSE_DR; RMSE_CEKF_Random = RMSE_DR;
-RMSE_CEKF_subOPT = RMSE_DR;
+RMSE_CEKF_Random_multi = RMSE_DR; RMSE_CEKF_subOPT = RMSE_DR;
 RMSE_CEKF_subMOD_multi = RMSE_DR; RMSE_CEKF_subOPT_multi = RMSE_DR;
 
 D_ACC_DR = zeros(k_f+1,1);
 D_ACC_CEKF_subMOD = D_ACC_DR; D_ACC_SAEKF_subMOD = D_ACC_DR;
 D_ACC_CEKF_Dense = D_ACC_DR; D_ACC_CEKF_Random = D_ACC_DR;
-D_ACC_CEKF_subOPT = D_ACC_DR;
+D_ACC_CEKF_Random_multi = D_ACC_DR; D_ACC_CEKF_subOPT = D_ACC_DR;
 D_ACC_CEKF_subMOD_multi = D_ACC_DR; D_ACC_CEKF_subOPT_multi = D_ACC_DR;
 
 for j=1:k_f+1
@@ -956,6 +1051,18 @@ for j=1:k_f+1
         D_ACC_CEKF_Random(j) = 1/j*(D_ACC_CEKF_Random(j-1)*(j-1) + X_wave'*X_wave);
     else
         D_ACC_CEKF_Random(j) = X_wave'*X_wave;
+    end
+    
+    X_wave = cat(1,X_true{j,:}) - cat(1,X_hat_CEKF_Random_multi{j,:});
+    NEES_CEKF_Random_multi(j) = X_wave'*P_CEKF_Random_multi{j}^-1*X_wave/n_x;
+    Tr_CEKF_Random_multi(j) = trace(P_CEKF_Random_multi{j});
+    tmp = sqrt(reshape(X_wave.^2,2,N));
+    RMSE_CEKF_Random_multi(j,:) = sum(tmp(1:2,:),1);
+    Logdet_CEKF_Random_multi(j) = f_logdet(P_CEKF_Random_multi{j});
+    if j > 1
+        D_ACC_CEKF_Random_multi(j) = 1/j*(D_ACC_CEKF_Random_multi(j-1)*(j-1) + X_wave'*X_wave);
+    else
+        D_ACC_CEKF_Random_multi(j) = X_wave'*X_wave;
     end
     
     X_wave = cat(1,X_true{j,:}) - cat(1,X_hat_SAEKF_subMOD{j,:});

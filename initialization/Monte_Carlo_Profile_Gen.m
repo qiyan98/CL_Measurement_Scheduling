@@ -10,8 +10,8 @@
 function Monte_Carlo_Profile_Gen()
 %%
 %%%%%%%%%%%%%%%%%%%%%%Monte Carlo Run Setup%%%%%%%%%%%%%%%%%%%%%%%%%
-M = 50;            %%% # Monte Carlo run
-% M = 1;            %%% # Monte Carlo run, for debug
+% M = 50;            %%% # Monte Carlo run
+M = 2;            %%% # Monte Carlo run, for debug
 
 [~,k_f] = IterationInit();
 length_noise = 1e2*k_f+1;
