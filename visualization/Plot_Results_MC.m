@@ -122,7 +122,8 @@ plot(Tk,sum(RMSE_DR_mont,2),'r--*','linewidth',2,'markerindices',ind_marker_spar
 
 legend('[19], q^i = 1','[19], q^i = 3','Alg. 1, q^i = 1','Alg. 1, q^i = 3',...
     'random, q^i = 1', 'random, q^i = 3','q^i = 8','DR',...
-    'position',[0.18 0.6 0.15 0.2],'units','normalized');
+    'position',[0.27 0.7 0.15 0.2],'units','normalized',...
+    'NumColumns',2);
 
 grid on;
 

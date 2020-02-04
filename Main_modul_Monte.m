@@ -16,6 +16,7 @@ addpath('iteration');
 addpath('visualization');
 rng(0,'twister');
 Monte_Carlo_Profile_Gen();  % generate noise once before running simulation
+T_random = 5;
 %%%%%%%%%%%%%%%%%%%%%%k%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Initialization
 %missed_onoff = 0: Every one updates
@@ -424,43 +425,47 @@ for Monte_index = 1:M
                 % end of submodular greedy sensor selection, q_i_multi
                 
                 % for random sensor selection
-                set_random = [];
-                for aa = 1:length(master_robot_allowed)
-                    b_hist = [];
-                    for bb = 1:q_i
-                        while 1
-                            b = randi(N,1);
-                            if b ~= aa && isempty(intersect(b_hist,b))
-                                b_hist = [b_hist;b];
-                                break
+                if(mod(k,T_random/delta) == 0 || k == 101)
+                    set_random = [];
+                    for aa = 1:length(master_robot_allowed)
+                        b_hist = [];
+                        for bb = 1:q_i
+                            while 1
+                                b = randi(N,1);
+                                if b ~= aa && isempty(intersect(b_hist,b))
+                                    b_hist = [b_hist;b];
+                                    break
+                                end
                             end
-                        end
-                        for tmp_i = 1:length(ab_set)
-                            if ab_set(tmp_i,:) == [aa,b]
-                                break;
+                            for tmp_i = 1:length(ab_set)
+                                if ab_set(tmp_i,:) == [aa,b]
+                                    break;
+                                end
                             end
+                            set_random = [set_random;tmp_i];
                         end
-                        set_random = [set_random;tmp_i];
                     end
                 end
                 
-                set_random_multi = [];
-                for aa = 1:length(master_robot_allowed)
-                    b_hist = [];
-                    for bb = 1:q_i_multi
-                        while 1
-                            b = randi(N,1);
-                            if b ~= aa && isempty(intersect(b_hist,b))
-                                b_hist = [b_hist;b];
-                                break
+                if(mod(k,T_random/delta) == 0 || k == 101)
+                    set_random_multi = [];
+                    for aa = 1:length(master_robot_allowed)
+                        b_hist = [];
+                        for bb = 1:q_i_multi
+                            while 1
+                                b = randi(N,1);
+                                if b ~= aa && isempty(intersect(b_hist,b))
+                                    b_hist = [b_hist;b];
+                                    break
+                                end
                             end
-                        end
-                        for tmp_i = 1:length(ab_set)
-                            if ab_set(tmp_i,:) == [aa,b]
-                                break;
+                            for tmp_i = 1:length(ab_set)
+                                if ab_set(tmp_i,:) == [aa,b]
+                                    break;
+                                end
                             end
+                            set_random_multi = [set_random_multi;tmp_i];
                         end
-                        set_random_multi = [set_random_multi;tmp_i];
                     end
                 end
                 

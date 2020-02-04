@@ -20,7 +20,9 @@ addpath('initialization');
 addpath('iteration');
 addpath('visualization');
 load('MRCLAMdata.mat');
-rng(1,'twister');
+% rng(2018,'twister'); % ok
+rng(1500,'twister');
+T_random = 30; % period for random selection
 
 NoiseGen(); % generate noise once before running simulation
 %%%%%%%%%%%%%%%%%%%%%%k%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -114,13 +116,12 @@ P_CEKF_subMOD_multi = cell(k_f,1);    % collective covariance matrix for standar
 P_CEKF_subOPT_multi = cell(k_f,1); % collective covariance matrix for standard EKF with sub-optimal graph (q^i > 1)
 
 flag_robot = cell(N,1); % flags for each robot observation
-mea_schedule = cell(k_f,1);
-mea_schedule_OPT = cell(k_f,1);
 mea_schedule_Random = cell(k_f,1);
 mea_schedule_Random_multi = cell(k_f,1);
 mea_schedule_subOPT = cell(k_f,1);
-mea_schedule_subMOD_multi = cell(k_f,1);
 mea_schedule_subOPT_multi = cell(k_f,1);
+mea_schedule_subMOD = cell(k_f,1);
+mea_schedule_subMOD_multi = cell(k_f,1);
 
 % load initial information when k = 0
 for i=1:N
@@ -452,43 +453,47 @@ for k=1:k_f
             % end of submodular greedy sensor selection, q_i_multi
             
             % for random sensor selection
-            set_random = [];
-            for aa = 1:length(master_robot_allowed)
-                b_hist = [];
-                for bb = 1:q_i
-                    while 1
-                        b = randi(N,1);
-                        if b ~= aa && isempty(intersect(b_hist,b))
-                            b_hist = [b_hist;b];
-                            break
+            if(mod(k,T_random/delta) == 0 || k == 1)
+                set_random = [];
+                for aa = 1:length(master_robot_allowed)
+                    b_hist = [];
+                    for bb = 1:q_i
+                        while 1
+                            b = randi(N,1);
+                            if b ~= aa && isempty(intersect(b_hist,b))
+                                b_hist = [b_hist;b];
+                                break
+                            end
                         end
-                    end
-                    for tmp_i = 1:length(ab_set)
-                        if ab_set(tmp_i,:) == [aa,b]
-                            break;
+                        for tmp_i = 1:length(ab_set)
+                            if ab_set(tmp_i,:) == [aa,b]
+                                break;
+                            end
                         end
+                        set_random = [set_random;tmp_i];
                     end
-                    set_random = [set_random;tmp_i];
                 end
             end
             
-            set_random_multi = [];
-            for aa = 1:length(master_robot_allowed)
-                b_hist = [];
-                for bb = 1:q_i_multi
-                    while 1
-                        b = randi(N,1);
-                        if b ~= aa && isempty(intersect(b_hist,b))
-                            b_hist = [b_hist;b];
-                            break
+            if(mod(k,T_random/delta) == 0 || k == 1)
+                set_random_multi = [];
+                for aa = 1:length(master_robot_allowed)
+                    b_hist = [];
+                    for bb = 1:q_i_multi
+                        while 1
+                            b = randi(N,1);
+                            if b ~= aa && isempty(intersect(b_hist,b))
+                                b_hist = [b_hist;b];
+                                break
+                            end
                         end
-                    end
-                    for tmp_i = 1:length(ab_set)
-                        if ab_set(tmp_i,:) == [aa,b]
-                            break;
+                        for tmp_i = 1:length(ab_set)
+                            if ab_set(tmp_i,:) == [aa,b]
+                                break;
+                            end
                         end
+                        set_random_multi = [set_random_multi;tmp_i];
                     end
-                    set_random_multi = [set_random_multi;tmp_i];
                 end
             end
             
@@ -602,6 +607,12 @@ for k=1:k_f
             for i=1:length(set_subopt_multi)
                 MeaMat_subOPT_multi = [MeaMat_subOPT_multi;i ab_set(set_subopt_multi(i),:)];
             end
+            mea_schedule_Random{k} = MeaMat_random;
+            mea_schedule_Random_multi{k} = MeaMat_random_multi;
+            mea_schedule_subMOD{k} = MeaMat_subMOD;
+            mea_schedule_subMOD_multi{k} = MeaMat_subMOD_multi;
+            mea_schedule_subOPT{k} = MeaMat_subOPT;
+            mea_schedule_subOPT_multi{k} = MeaMat_subMOD_multi;
             a_set_subMOD = MeaMat_subMOD(:,2);
             b_set_subMOD = MeaMat_subMOD(:,3);
             a_set_subMOD_multi = MeaMat_subMOD_multi(:,2);
@@ -621,7 +632,6 @@ for k=1:k_f
         
         %%%%% optimize for measurement scheduling by changing MeaMat %%%%%
 
-        mea_schedule{k} = MeaMat_subOPT;
         %%%%% ii_a - relative measurment order for submodular edges %%%%%
         for ii_a = 1:length(a_set_subMOD)
             cur_a = MeaMat_subMOD(ii_a,2);
