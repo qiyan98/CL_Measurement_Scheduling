@@ -9,18 +9,14 @@
 
 % at this moment, data set 7 is used
 addpath('dataset');
-% loadMRCLAMdataSet;
-% sampleMRCLAMdataSet;
 
 tic;
-% clear;
 clear all
 close all;
 addpath('initialization');
 addpath('iteration');
 addpath('visualization');
 load('MRCLAMdata.mat');
-% rng(2018,'twister'); % ok
 rng(1500,'twister');
 T_random = 30; % period for random selection
 
@@ -254,18 +250,8 @@ for k=1:k_f
         
         % elements in MeaMat:
         % update sequence - robot_a - robot_b - robot_missed
-%         MeaMat_subMOD = zeros(length(a_set_subMOD),size_RelMea_Table(2)+1);
-%         for ii=1:length(a_set_subMOD)
-%             MeaMat_subMOD(ii,1) = find(UpdateOrder == a_set_subMOD(ii));
-%         end
-%         MeaMat_subMOD(:,2:end) = RelMea_Table{1,j_mea}(2:end,1:end);
-%         % Sorting the order of the update order based on the prespecified guidline saved in UpdateOrder
-%         MeaMat_subMOD = sortrows(MeaMat_subMOD,1);
-        
+
         %%%%%%%%% measurement-related flag settings %%%%%%%%%
-        %         if size_RelMea_Table(1) > 2 % see if sequential measurement is on
-        %             flag_seq = 1;
-        %         end
         flag_seq = 1;
         flag_mea=1;
     end
@@ -318,19 +304,7 @@ for k=1:k_f
             cov_Z_post = @(S)cov_Z - cov_Z*fun_mat_O(S)'*(fun_mat_O(S)*cov_Z*fun_mat_O(S)' + cov_V)^-1*fun_mat_O(S)*cov_Z;
             f_H_multi = @(S)f_logdet(cov_Z_post(S));
             
-%             if k > 0.1*k_f && k <= 0.2*k_f
-%                 set_abs_mea = 1;
-%             elseif k > 0.35*k_f && k <= 0.4*k_f
-%                 set_abs_mea = 3;
-%             elseif k > 0.6*k_f && k <= 0.65*k_f
-%                 set_abs_mea = 2;
-%             elseif k > 0.95*k_f && k <= k_f
-%                 set_abs_mea = 5;
-%             else
-%                 set_abs_mea = [];
-%             end
             set_abs_mea = [];
-            
             num_sensor = N*(N-1);
             if k <= 0.2*k_f
                 master_robot_allowed = [1 3 5];
@@ -349,7 +323,6 @@ for k=1:k_f
             elseif k <= k_f
                 master_robot_allowed = [4];
             end
-%             master_robot_allowed = 1:N;
             r_sensor = length(master_robot_allowed);
             
             sensor_allowed = cell(length(master_robot_allowed),1);
@@ -578,10 +551,6 @@ for k=1:k_f
             set_dense = [1:N*(N-1) N*(N-1)+set_abs_mea];
             set_subopt = [set_subopt N*(N-1)+set_abs_mea];
             set_subopt_multi = [set_subopt_multi N*(N-1)+set_abs_mea];
-            
-            %             set_selected = set_dense;
-            %             set_random = set_dense;
-            %             set_subopt = set_dense;
             
             MeaMat_subMOD = []; MeaMat_random = []; MeaMat_random_multi = [];
             MeaMat_dense = []; MeaMat_subOPT = [];
