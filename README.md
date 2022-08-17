@@ -19,7 +19,7 @@ Please cite our work if you use this code in your research/project:
 ```
 
 <p float='left'>
-	<img src="https://qiyan98.github.io/images/RAL2020.png" width="250"/>
+	<img src="ral_cl.png" width="400"/>
 </p>
 
 [[arXiv](https://arxiv.org/abs/1912.04709)] [[video](https://www.youtube.com/watch?v=5KAiav6astY)]
